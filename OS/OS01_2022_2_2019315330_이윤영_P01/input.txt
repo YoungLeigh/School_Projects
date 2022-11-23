@@ -1,0 +1,16 @@
+Number of Processes = 5
+PID1 = 1
+PID2 = 2
+PID3 = 3
+PID4 = 4
+PID5 = 5
+Arrival Time P1 = 0
+Arrival Time P2 = 1
+Arrival Time P3 = 3
+Arrival Time P4 = 5
+Arrival Time P5 = 6
+Burst Time P1 = 3
+Burst Time P2 = 7
+Burst Time P3 = 2
+Burst Time P4 = 5
+Burst Time P5 = 3
