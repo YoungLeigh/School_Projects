@@ -1,13 +1,13 @@
 # 1. 텍스트 파일에 입력된 정보를 리스트들에 저장---------------------------------------------------------------------------------------
 import numpy as np
-no_of_Runits = []
+pageNum = []
 req_Matrix = []
 alloc_Matrix = []
 process_List = []
 def add_values():  # 텍스트 파일의 정보를 리스트들에 입력하는 함수
     global no_of_p
     global no_of_Rtypes
-    global no_of_Runits
+    global pageNum
     open("input.txt", "r", encoding="UTF-8")
     with open("input.txt") as f:
         data = f.read().splitlines()
@@ -54,7 +54,7 @@ def find_remaining(current_allocation): #remaining resource units의 합을 찾�
         totalList.append(sum(sum1))
         sum1 = []
     for n in range(len(totalList)):
-        remainList.append(no_of_Runits[n]-totalList[n]) #total resource units와 allocated resource units의 차 구하기
+        remainList.append(pageNum[n] - totalList[n]) #total resource units와 allocated resource units의 차 구하기
     return remainList
 
 
@@ -158,6 +158,6 @@ graph_reduction()
 print("list of processes: %s" %process_List)
 print("no of processes: %s" %no_of_p)
 print("no of Resource types: %s" %no_of_Rtypes)
-print("no of Resource units: %s" %no_of_Runits)
+print("no of Resource units: %s" % pageNum)
 print("Allocated R_units matrix: %s" %alloc_Matrix)
 print("Requested R_units matrix: %s" % req_Matrix)
