@@ -43,12 +43,12 @@ add_values()
 #6 전체적으로 하나하나 처리되는 loop을 만들어야한다!!
 
 
-def minAlgorithm():
+def Min_algorithm():
     pageFault = []
     pageFaultIndex = [] #몇번째 page에서 fault가 발생했는지 확인
     memory = []
     forwardDistance = [] #forward distance list
-    refStringMin = refString
+    refStringMin = refString[:]
     n = 1
     # for i in range(pageFrameNum):
     #     a = refStringMin.pop(0)
@@ -58,8 +58,9 @@ def minAlgorithm():
     #     n += 1 #페이지 처리되면 index +1
     while True:
         if len(refStringMin) == 0: #page가 모두 처리되면 break
+            print("Min 알고리즘 기법 결과--------------------------------------------------------")
             print("Page Fault 총 횟수: %s" % len(pageFault))
-            print("메모리 상태 변화과정(Time): %s" % pageFaultIndex)
+            print("메모리 상태 변화과정(Time): %s \n" % pageFaultIndex)
             break
         incomingPage = refStringMin.pop(0) #처리되는 page number
         # print("refstringMin: %s"%refStringMin)
@@ -102,7 +103,7 @@ def minAlgorithm():
         n += 1 #page index 증가
 
 
-minAlgorithm()
+Min_algorithm()
 
 # 3. LRU algorithm---------------------------------------------------------------------------------------
 
@@ -110,6 +111,75 @@ minAlgorithm()
 #2. 처리된 page는 list에 담고  reference string list에서 삭제
 #3. 처리된 page list에서 메모리에 있는 각 page가 처음부터 시작해서 몇번째에 등장하는지 N+=1로 계산. 리스트를 생성. 해당 값이 제일 낮은 page를 교체
 #4. 3,4번이 while loop으로 돌며 if 문을 넣어야 한다. if 첫번째 숫자가(참조되는 숫자) 메모리안에 있으면 pass.
+
+def LRU_algorithm():
+    global pageNum
+    global pageFrameNum
+    global windowSize
+    global refStringLen
+    global refString
+    pageFault = []
+    pageFaultIndex = [] #몇번째 page에서 fault가 발생했는지 확인
+    memory = []
+    backwardDistance = [] #backward distance list
+    refHistory = [] #참조한 페이지 list
+    refStringLRU = refString[:]
+    n = 1
+    while True:
+        if len(refStringLRU) == 0: #page가 모두 처리되면 break
+            print("LRU 알고리즘 기법 결과--------------------------------------------------------")
+            print("Page Fault 총 횟수: %s" % len(pageFault))
+            print("메모리 상태 변화과정(Time): %s" % pageFaultIndex)
+            break
+        incomingPage = refStringLRU.pop(0) #처리되는 page number
+        # print("refstringMin: %s"%refStringMin)
+        # print("memory", memory)
+        if incomingPage in memory:
+            # print("passed!", incomingPage)
+            n += 1
+            refHistory.append(incomingPage)
+            continue
+        else: #메모리에 해당 페이지가 없을 경우 page fault 발생
+            # print("fault!", incomingPage)
+            pageFault.append(incomingPage)
+            pageFaultIndex.append(n)
+            if len(memory) < pageFrameNum: #메모리가 비어있을때 첫 시작
+                memory.append(incomingPage)
+                refHistory.append(incomingPage)
+            else:
+                refHistory.reverse() #referenced History를 reverse해서 recently referenced page 확인
+                for i in memory: #backward distance 구하기
+                    m = 0
+                    for page in refHistory:
+                        if i == page:
+                            backwardDistance.append(m)
+                            break
+                        elif m == len(refHistory)-1:
+                            backwardDistance.append(m)
+                        else:
+                            m+=1
+                refHistory.reverse() #refHistory다시 원상복구
+                # print("backwardDistance", backwardDistance)
+                maxBD = [max(backwardDistance)] #backward distance가 제일 높은 값을 교체
+                if len(maxBD) > 1:
+                    highestBD = (maxBD)[0] #tie-breaking rule로 첫번째 선정
+                elif len(maxBD) == 1:
+                    highestBD = (maxBD)[0]
+                # print("backwardDistance", backwardDistance)
+                # print("highestFD", highestFD)
+                victimIndex = backwardDistance.index(highestBD)
+                victim = memory[victimIndex]
+                memory.remove(victim)
+                memory.append(incomingPage)
+                backwardDistance = [] #초기화
+                refHistory.append(incomingPage)
+        n += 1 #page index 증가
+
+LRU_algorithm()
+
+
+
+
 
 #4. LFU algorithm---------------------------------------------------------------------------------------
 
